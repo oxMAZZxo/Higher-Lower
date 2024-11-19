@@ -15,18 +15,18 @@ namespace Higher_Lower
 
         public Session()
         {
-            myDeck = new Deck(false,true);
-
+            myDeck = new Deck(false, false);
+            DrawCard(myDeck.GetCard(myDeck.blackJokerIndex), 5, 5);
         }
 
-        void DrawCard(Card card,int startX, int startY)
+        void DrawCard(Card card, int startX, int startY)
         {
             int charCodeToPrint;
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
-            for(int y = 0; y < cardYWidth + 1; y++)
+            for (int y = 0; y < cardYWidth + 1; y++)
             {
-                for(int x = 0; x < cardXWidth + 1; x++)
+                for (int x = 0; x < cardXWidth + 1; x++)
                 {
                     charCodeToPrint = 32;
                     Console.SetCursorPosition(x + startX, y + startY);
@@ -59,7 +59,7 @@ namespace Higher_Lower
                 }
                 Console.WriteLine();
             }
-            
+
             Console.SetCursorPosition(startX + 2, startY + 1);
             Console.ForegroundColor = card.suit.color;
             Console.Write(card.value);
@@ -69,7 +69,7 @@ namespace Higher_Lower
             Console.Write(card.suit.code);
             Console.SetCursorPosition(startX + cardXWidth - 2, startY + cardYWidth - 1);
             Console.Write(card.value);
-            
+
         }
 
         void DrawCardFaceDown(int startX, int startY)
@@ -77,9 +77,9 @@ namespace Higher_Lower
             int charCodeToPrint;
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
-            for(int y = 0; y < cardYWidth + 1; y++)
+            for (int y = 0; y < cardYWidth + 1; y++)
             {
-                for(int x = 0; x < cardXWidth + 1; x++)
+                for (int x = 0; x < cardXWidth + 1; x++)
                 {
                     charCodeToPrint = 32;
                     Console.SetCursorPosition(x + startX, y + startY);
@@ -113,16 +113,16 @@ namespace Higher_Lower
                 Console.WriteLine();
             }
         }
-    
-        void DrawDeck()
+
+        void DrawDeck(bool jokers)
         {
             int nextCard = 0;
-            for(int y = 0; y < (cardYWidth + 2) * 4; y += cardYWidth + 2)
+            for (int y = 0; y < (cardYWidth + 2) * 4; y += cardYWidth + 2)
             {
-                for(int x = 0; x < (cardXWidth + 2) * 13; x += cardXWidth + 2)
+                for (int x = 0; x < (cardXWidth + 2) * 13; x += cardXWidth + 2)
                 {
-                    DrawCard(myDeck.GetCard(nextCard),x,y);
-                    nextCard ++;
+                    DrawCard(myDeck.GetCard(nextCard), x, y);
+                    nextCard++;
                 }
             }
         }

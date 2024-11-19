@@ -1,25 +1,31 @@
 using System;
 
-namespace Higher_Lower{
-    public class Deck{
-        
+namespace Higher_Lower
+{
+    public class Deck
+    {
+
         #region suitCode
         const char spades = '\u2660';   // ♠
         const char hearts = '\u2665';   // ♥
         const char diamonds = '\u2666'; // ♦
         const char clubs = '\u2663';    // ♣
         #endregion
-        
+
         private Card[] cards;
-        public int length { 
+        public int length
+        {
             get => cards.Length;
         }
+        public int redJokerIndex;
+        public int blackJokerIndex;
+
         public Deck(bool jokers, bool shuffle)
         {
             cards = new Card[54];
             GenerateDeck();
-            if(shuffle) {ShuffleDeck(); }
-            
+            if (shuffle) { ShuffleDeck(); }
+
         }
 
         private void GenerateDeck()
@@ -27,9 +33,9 @@ namespace Higher_Lower{
             string currentCardValue = "1";
             char currentSuit = spades;
             ConsoleColor currentSuitColor = ConsoleColor.Black;
-            
+
             int deckCounter = 0;
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 switch (i)
                 {
@@ -37,8 +43,8 @@ namespace Higher_Lower{
                     case 2: currentSuit = diamonds; currentSuitColor = ConsoleColor.Red; break;
                     case 3: currentSuit = clubs; currentSuitColor = ConsoleColor.Black; break;
                 }
-                
-                for(int j = 1; j < 14; j++)
+
+                for (int j = 1; j < 14; j++)
                 {
                     Suit newSuit; newSuit.code = currentSuit; newSuit.color = currentSuitColor;
                     currentCardValue = j.ToString();
@@ -51,15 +57,23 @@ namespace Higher_Lower{
                     }
                     Card newCard; newCard.value = currentCardValue; newCard.suit = newSuit;
                     cards[deckCounter] = newCard;
-                    deckCounter ++;
+                    deckCounter++;
                 }
             }
+            Suit suit; suit.code = '\u2300'; suit.color = ConsoleColor.Black;
+            Card blackJoker; blackJoker.value = "joker"; blackJoker.suit = suit;
+            cards[cards.Length - 2] = blackJoker;
+            Suit redSuit; redSuit.code = '\u2300'; redSuit.color = ConsoleColor.Red;
+            Card redJoker; redJoker.value = "joker"; redJoker.suit = redSuit;
+            cards[cards.Length - 1] = redJoker;
+            redJokerIndex = cards.Length - 1;
+            blackJokerIndex = cards.Length - 2;
         }
 
         private void ShuffleDeck()
         {
             Random random = new Random();
-            for(int i = 0; i < cards.Length; i++)
+            for (int i = 0; i < cards.Length; i++)
             {
                 int rnd = i + random.Next(cards.Length - i);
 
@@ -81,7 +95,8 @@ namespace Higher_Lower{
         public Suit suit;
     }
 
-    public struct Suit{
+    public struct Suit
+    {
         public char code;
         public ConsoleColor color;
     }
