@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,11 +10,21 @@ namespace Higher_Lower
 {
 public class Session
 {
-    static int cardXWidth = 11;
-    static int cardYWidth = 11;
+    const int cardXWidth = 11;
+    const int cardYWidth = 11;
+    const int scorePosX = 0;
+    const int scorePosY = 0;
+    const int resetPosX = 30;
+    const int resetPosY = 0;
+    const int cardDrawPosX = 10;
+    const int cardDrawPosY = 2;
+    const int questionPosX = 0;
+    const int questionPosY = 15;
     private Deck myDeck;
     private string? userInput;
     private bool exitGame;
+    private int score;
+    private int noOfResets;
 
     /// <summary>
     /// Instantiates a session
@@ -31,6 +42,8 @@ public class Session
             createJokers = true;
         }
         myDeck = new Deck(createJokers, false);
+        noOfResets = 0;
+        score = 0;
         exitGame = false;
     }
 
@@ -41,11 +54,25 @@ public class Session
     {
         Console.Clear();
         Console.WriteLine("Game starting");
-        
         while(!exitGame)
         {
             Console.Clear();
-            DrawCard(myDeck.GetCard(myDeck.redJokerIndex),0,0);
+            Console.SetCursorPosition(scorePosX,scorePosY);
+            Console.Write($"Score: {score}");
+            Console.SetCursorPosition(resetPosX,resetPosY);
+            Console.Write($"Resets: {noOfResets}");
+            
+            Card cardOne = myDeck.GetRandomCard();
+            Card cardTwo = myDeck.GetRandomCard();
+
+            DrawCard(cardOne,cardDrawPosX,cardDrawPosY);
+            DrawCardFaceDown(cardDrawPosX + cardXWidth + 2,cardDrawPosY);
+
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.BackgroundColor = ConsoleColor.Black;
+            Console.SetCursorPosition(questionPosX,questionPosY);
+            Console.Write("Is the hidden card higher or lower? H/L or Higher/Lower :");
+            userInput = Console.ReadLine();
             Console.ReadLine();
         }
     }
@@ -183,5 +210,6 @@ public class Session
         }
 
     }
+
 }
 }
