@@ -22,8 +22,9 @@ namespace Higher_Lower
 
         public Deck(bool jokers, bool shuffle)
         {
-            cards = new Card[54];
+            cards = new Card[52];
             GenerateDeck();
+            if (jokers) { AddJokers(); }
             if (shuffle) { ShuffleDeck(); }
 
         }
@@ -60,14 +61,23 @@ namespace Higher_Lower
                     deckCounter++;
                 }
             }
+        }
+
+        private void AddJokers()
+        {
+            List<Card> tempCards = new List<Card>(cards);
+
+
             Suit suit; suit.code = '\u2300'; suit.color = ConsoleColor.Black;
-            Card blackJoker; blackJoker.value = "joker"; blackJoker.suit = suit; blackJoker.isJoker = true;
-            cards[cards.Length - 2] = blackJoker;
+            Card blackJoker; blackJoker.value = "Joker"; blackJoker.suit = suit; blackJoker.isJoker = true;
+            tempCards.Add(blackJoker);
             Suit redSuit; redSuit.code = '\u2300'; redSuit.color = ConsoleColor.Red;
-            Card redJoker; redJoker.value = "joker"; redJoker.suit = redSuit; redJoker.isJoker = true;
-            cards[cards.Length - 1] = redJoker;
-            redJokerIndex = cards.Length - 1;
-            blackJokerIndex = cards.Length - 2;
+            Card redJoker; redJoker.value = "Joker"; redJoker.suit = redSuit; redJoker.isJoker = true;
+            tempCards.Add(redJoker);
+            blackJokerIndex = tempCards.Count - 2;
+            redJokerIndex = tempCards.Count - 1;
+
+            cards = tempCards.ToArray();
         }
 
         private void ShuffleDeck()

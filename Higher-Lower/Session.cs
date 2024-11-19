@@ -17,17 +17,18 @@ public class Session
 
     public Session()
     {
-        Console.WriteLine("Welcome to Higher/Lower");
-        Console.WriteLine("Creating deck....");
-        Console.Write("Create Jokers? Enter Y/N or yes/no: ");
-        userInput = Console.ReadLine();
-        userInput = userInput?.ToUpper();
+        // Console.WriteLine("Welcome to Higher/Lower");
+        // Console.WriteLine("Creating deck....");
+        // Console.Write("Create Jokers? Enter Y/N or yes/no: ");
+        // userInput = Console.ReadLine();
+        // userInput = userInput?.ToUpper();
+        userInput = "Y";
         bool createJokers = false;
         if(userInput == "Y" || userInput == "YES")
         {
             createJokers = true;
         }
-        myDeck = new Deck(true, createJokers);
+        myDeck = new Deck(createJokers, false);
         exitGame = false;
     }
 
@@ -38,7 +39,9 @@ public class Session
         
         while(!exitGame)
         {
-            
+            Console.Clear();
+            DrawCard(myDeck.GetCard(myDeck.redJokerIndex),0,0);
+            Console.ReadLine();
         }
     }
 
@@ -140,14 +143,23 @@ public class Session
     private void DrawDeck(bool jokers)
     {
         int nextCard = 0;
+        int lastY = 0;
         for (int y = 0; y < (cardYWidth + 2) * 4; y += cardYWidth + 2)
         {
             for (int x = 0; x < (cardXWidth + 2) * 13; x += cardXWidth + 2)
             {
+                Thread.Sleep(50);
                 DrawCard(myDeck.GetCard(nextCard), x, y);
                 nextCard++;
             }
+            lastY = y; 
         }
+
+        for(int i = 0; i < (cardXWidth + 2) * 2; i += cardXWidth + 2)
+        {
+            DrawCard(myDeck.GetCard(myDeck.blackJokerIndex),i,lastY);
+        }
+
     }
 }
 }
