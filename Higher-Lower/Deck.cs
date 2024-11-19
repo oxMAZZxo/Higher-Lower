@@ -20,6 +20,11 @@ namespace Higher_Lower
         public int redJokerIndex;
         public int blackJokerIndex;
 
+        /// <summary>
+        /// Instantiates a deck, with optional jokers and shuffling
+        /// </summary>
+        /// <param name="jokers">If true, the deck will contain Jokers</param>
+        /// <param name="shuffle">If true, the deck will be shuffled on instantiation</param>
         public Deck(bool jokers, bool shuffle)
         {
             cards = new Card[52];
@@ -29,6 +34,9 @@ namespace Higher_Lower
 
         }
 
+        /// <summary>
+        /// Generates a standard 52 size deck.
+        /// </summary>
         private void GenerateDeck()
         {
             string currentCardValue = "1";
@@ -63,6 +71,9 @@ namespace Higher_Lower
             }
         }
 
+        /// <summary>
+        /// Adds Jokers to the deck
+        /// </summary>
         private void AddJokers()
         {
             List<Card> tempCards = new List<Card>(cards);
@@ -80,20 +91,27 @@ namespace Higher_Lower
             cards = tempCards.ToArray();
         }
 
-        private void ShuffleDeck()
+
+        /// <summary>
+        /// Shuffles the deck
+        /// </summary>
+        public void ShuffleDeck()
         {
             Random random = new Random();
             for (int i = 0; i < cards.Length; i++)
             {
                 int rnd = i + random.Next(cards.Length - i);
-
                 Card temp = cards[rnd];
                 cards[rnd] = cards[i];
                 cards[i] = temp;
             }
-
         }
 
+        /// <summary>
+        /// Gets a card
+        /// </summary>
+        /// <param name="index">The index of the card to return</param>
+        /// <returns></returns>
         public Card GetCard(int index)
         {
             return cards[index];

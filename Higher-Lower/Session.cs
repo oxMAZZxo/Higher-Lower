@@ -15,14 +15,16 @@ public class Session
     private string? userInput;
     private bool exitGame;
 
+    /// <summary>
+    /// Instantiates a session
+    /// </summary>
     public Session()
     {
-        // Console.WriteLine("Welcome to Higher/Lower");
-        // Console.WriteLine("Creating deck....");
-        // Console.Write("Create Jokers? Enter Y/N or yes/no: ");
-        // userInput = Console.ReadLine();
-        // userInput = userInput?.ToUpper();
-        userInput = "Y";
+        Console.WriteLine("Welcome to Higher/Lower");
+        Console.WriteLine("Creating deck....");
+        Console.Write("Create Jokers? Enter Y/N or yes/no: ");
+        userInput = Console.ReadLine();
+        userInput = userInput?.ToUpper();
         bool createJokers = false;
         if(userInput == "Y" || userInput == "YES")
         {
@@ -32,6 +34,9 @@ public class Session
         exitGame = false;
     }
 
+    /// <summary>
+    /// Starts a game session
+    /// </summary>
     public void StartGame()
     {
         Console.Clear();
@@ -45,6 +50,13 @@ public class Session
         }
     }
 
+
+    /// <summary>
+    /// Draws a card on the screen with a specifed location
+    /// </summary>
+    /// <param name="card">The card to draw</param>
+    /// <param name="startX">The x position on the console</param>
+    /// <param name="startY">The y position on the console</param>
     private void DrawCard(Card card, int startX, int startY)
     {
         int charCodeToPrint;
@@ -98,6 +110,11 @@ public class Session
 
     }
 
+    /// <summary>
+    /// Draws a template card with the face down
+    /// </summary>
+    /// <param name="startX">The x position on the console</param>
+    /// <param name="startY">The y position on the console</param>
     private void DrawCardFaceDown(int startX, int startY)
     {
         int charCodeToPrint;
@@ -140,6 +157,11 @@ public class Session
         }
     }
 
+    /// <summary>
+    /// Draws the whole deck on the console.
+    /// This function may cause bugs on your console, dependning on its settings
+    /// </summary>
+    /// <param name="jokers">If true, it will draw the jokers as well</param>
     private void DrawDeck(bool jokers)
     {
         int nextCard = 0;
