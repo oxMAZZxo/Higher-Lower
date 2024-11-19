@@ -15,9 +15,8 @@ namespace Higher_Lower
 
         public Session()
         {
-            myDeck = new Deck();
+            myDeck = new Deck(false,true);
 
-            DrawCardFaceDown(5,5);
         }
 
         void DrawCard(Card card,int startX, int startY)
@@ -112,6 +111,19 @@ namespace Higher_Lower
                     Console.Write(Strings.ChrW(charCodeToPrint));
                 }
                 Console.WriteLine();
+            }
+        }
+    
+        void DrawDeck()
+        {
+            int nextCard = 0;
+            for(int y = 0; y < (cardYWidth + 2) * 4; y += cardYWidth + 2)
+            {
+                for(int x = 0; x < (cardXWidth + 2) * 13; x += cardXWidth + 2)
+                {
+                    DrawCard(myDeck.GetCard(nextCard),x,y);
+                    nextCard ++;
+                }
             }
         }
     }

@@ -10,6 +10,7 @@ namespace Higher_Lower
 
         static void Main(string[] args)
         {
+            Console.SetBufferSize(1000,800);
             session = new Session();
             Console.ReadLine();
         }

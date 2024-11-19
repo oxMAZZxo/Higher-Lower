@@ -1,5 +1,4 @@
 using System;
-using System.Drawing;
 
 namespace Higher_Lower{
     public class Deck{
@@ -12,11 +11,15 @@ namespace Higher_Lower{
         #endregion
         
         private Card[] cards;
-        
-        public Deck()
+        public int length { 
+            get => cards.Length;
+        }
+        public Deck(bool jokers, bool shuffle)
         {
             cards = new Card[54];
             GenerateDeck();
+            if(shuffle) {ShuffleDeck(); }
+            
         }
 
         private void GenerateDeck()
@@ -41,6 +44,7 @@ namespace Higher_Lower{
                     currentCardValue = j.ToString();
                     switch (j)
                     {
+                        case 1: currentCardValue = "A"; break;
                         case 11: currentCardValue = "J"; break;
                         case 12: currentCardValue = "Q"; break;
                         case 13: currentCardValue = "K"; break;
@@ -51,7 +55,21 @@ namespace Higher_Lower{
                 }
             }
         }
-    
+
+        private void ShuffleDeck()
+        {
+            Random random = new Random();
+            for(int i = 0; i < cards.Length; i++)
+            {
+                int rnd = i + random.Next(cards.Length - i);
+
+                Card temp = cards[rnd];
+                cards[rnd] = cards[i];
+                cards[i] = temp;
+            }
+
+        }
+
         public Card GetCard(int index)
         {
             return cards[index];
@@ -59,7 +77,7 @@ namespace Higher_Lower{
     }
     public struct Card()
     {
-        public string value;
+        public string? value;
         public Suit suit;
     }
 
