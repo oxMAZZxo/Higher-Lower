@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Xml;
-using Microsoft.VisualBasic;
 
 namespace Higher_Lower
 {
@@ -12,7 +10,7 @@ namespace Higher_Lower
         {
             Console.SetBufferSize(1000,800);
             session = new Session();
-            Console.ReadLine();
+            session.StartGame();
         }
     }
 }

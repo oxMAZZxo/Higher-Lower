@@ -55,16 +55,16 @@ namespace Higher_Lower
                         case 12: currentCardValue = "Q"; break;
                         case 13: currentCardValue = "K"; break;
                     }
-                    Card newCard; newCard.value = currentCardValue; newCard.suit = newSuit;
+                    Card newCard; newCard.value = currentCardValue; newCard.suit = newSuit; newCard.isJoker = false;
                     cards[deckCounter] = newCard;
                     deckCounter++;
                 }
             }
             Suit suit; suit.code = '\u2300'; suit.color = ConsoleColor.Black;
-            Card blackJoker; blackJoker.value = "joker"; blackJoker.suit = suit;
+            Card blackJoker; blackJoker.value = "joker"; blackJoker.suit = suit; blackJoker.isJoker = true;
             cards[cards.Length - 2] = blackJoker;
             Suit redSuit; redSuit.code = '\u2300'; redSuit.color = ConsoleColor.Red;
-            Card redJoker; redJoker.value = "joker"; redJoker.suit = redSuit;
+            Card redJoker; redJoker.value = "joker"; redJoker.suit = redSuit; redJoker.isJoker = true;
             cards[cards.Length - 1] = redJoker;
             redJokerIndex = cards.Length - 1;
             blackJokerIndex = cards.Length - 2;
@@ -93,6 +93,7 @@ namespace Higher_Lower
     {
         public string? value;
         public Suit suit;
+        public bool isJoker;
     }
 
     public struct Suit
