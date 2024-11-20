@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -56,44 +57,62 @@ public class Session
         {
             Console.Clear();
 
-            Card cardOne = myDeck.GetRandomCard();
-            Card cardTwo = myDeck.GetRandomCard();
-            DisplayUI(cardOne);
-
+            Card visibleCard = myDeck.GetRandomCard();
+            Card hiddenCard = myDeck.GetRandomCard();
+            DisplayUI(visibleCard,hiddenCard);
 
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.BackgroundColor = ConsoleColor.Black;
             Console.SetCursorPosition(questionPosX,questionPosY);
-            Console.Write("Is the hidden card higher, lower, or equal? H/L or Higher/Lower : ");
-            userInput = Console.ReadLine();
+            Console.Write("Is the hidden card higher, lower, or equal? H/L/E: ");
+            userInput = Console.ReadLine()?.ToUpper();
             
-            bool higher = true;
-            if(cardOne.GetCardValue() > cardTwo.GetCardValue())
+            bool isHiddenCardHigher = false;
+            bool equal = false;
+
+            if(visibleCard.GetCardValue() == hiddenCard.GetCardValue())
             {
-                higher = false;
+                equal = true;
             }
 
-            bool correct;
-            string message;
-            if(userInput == "H" && higher)
+            if(!equal)
             {
-                correct = true;
-                message = "That is correct!";
-            }else
-            {
-                correct = false;
-                message = "That is wrong...";
+                if(visibleCard.GetCardValue() < hiddenCard.GetCardValue()) {isHiddenCardHigher = true;}
             }
-            
-            if(correct) {score ++;}else {noOfResets ++;}
 
-            DisplayResult(cardTwo, message);
+            string message = "You are wrong!";
+            bool correct = false;
+            switch(userInput)
+            {
+                case "E":
+                    if(equal) {
+                        message = "You are corect! They are equal in value.";
+                        correct = true;
+                    }
+                break;
+                case "H":
+                    if(isHiddenCardHigher)
+                    {
+                        message = "You are correct! The hidden card has a higher value!";
+                        correct = true;
+                    }
+                break;
+                case "L":
+                    if(!isHiddenCardHigher)
+                    {
+                        message = "You are correct! The hidden card has a lower value";
+                        correct = true;
+                    }
+                break;
+            }
 
+            DisplayResult(hiddenCard,message);
+            if(correct) {score ++;} else{noOfResets ++;}
             Console.ReadLine();
         }
     }
 
-    void DisplayUI(Card visibleCard)
+    void DisplayUI(Card visibleCard,Card hiddenCard)
     {
         Console.BackgroundColor = ConsoleColor.Black;
         Console.ForegroundColor = ConsoleColor.Gray;
@@ -103,7 +122,7 @@ public class Session
         Console.Write($"Resets: {noOfResets}");
             
         DrawCard(visibleCard,cardDrawPosX,cardDrawPosY);
-        DrawCardFaceDown(cardDrawPosX + cardXWidth + 2,cardDrawPosY);
+        DrawCard(hiddenCard,cardDrawPosX + cardXWidth + 2, cardDrawPosY);
     }
 
     void DisplayResult(Card hiddenCard, string message)
