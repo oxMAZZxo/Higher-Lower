@@ -64,7 +64,7 @@ public class Deck
                     case 12: currentCardValue = "Q"; break;
                     case 13: currentCardValue = "K"; break;
                 }
-                Card newCard; newCard.value = currentCardValue; newCard.suit = newSuit; newCard.isJoker = false; newCard.isUsed = false;
+                Card newCard = new Card(currentCardValue,newSuit,false);
                 cards[deckCounter] = newCard;
                 deckCounter++;
             }
@@ -78,19 +78,17 @@ public class Deck
     {
         List<Card> tempCards = new List<Card>(cards);
 
-
-        Suit suit; suit.code = '\u2300'; suit.color = ConsoleColor.Black;
-        Card blackJoker; blackJoker.value = "Joker"; blackJoker.suit = suit; blackJoker.isJoker = true; blackJoker.isUsed = false;
+        Suit blackSuit; blackSuit.code = '\u2300'; blackSuit.color = ConsoleColor.Black;
+        Card blackJoker = new Card("Joker", blackSuit,true); 
         tempCards.Add(blackJoker);
         Suit redSuit; redSuit.code = '\u2300'; redSuit.color = ConsoleColor.Red;
-        Card redJoker; redJoker.value = "Joker"; redJoker.suit = redSuit; redJoker.isJoker = true; redJoker.isUsed = false;
+        Card redJoker = new Card("Joker", redSuit, true);
         tempCards.Add(redJoker);
         blackJokerIndex = tempCards.Count - 2;
         redJokerIndex = tempCards.Count - 1;
 
         cards = tempCards.ToArray();
     }
-
 
     /// <summary>
     /// Shuffles the deck
@@ -117,6 +115,10 @@ public class Deck
         return cards[index];
     }
 
+    /// <summary>
+    /// Returns a random that isn't being currently used in the game
+    /// </summary>
+    /// <returns></returns>
     public Card GetRandomCard()
     {
         Random rnd = new Random();
@@ -133,26 +135,14 @@ public class Deck
                 valid = false;
             }
         }
-        result.isUsed = true;
+        result.SetUsed(true);
         return result;
     }
 
-    public void ReturnCard(Card card)
+    public void ReturnCardToDeck(Card card)
     {
-        card.isUsed = false;
+        card.SetUsed(false);
     }
 }
-public struct Card()
-{
-    public string? value;
-    public Suit suit;
-    public bool isJoker;
-    public bool isUsed;
-}
 
-public struct Suit
-{
-    public char code;
-    public ConsoleColor color;
-}
 }

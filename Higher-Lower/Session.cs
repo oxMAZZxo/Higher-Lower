@@ -52,31 +52,68 @@ public class Session
     /// </summary>
     public void StartGame()
     {
-        Console.Clear();
-        Console.WriteLine("Game starting");
         while(!exitGame)
         {
             Console.Clear();
-            Console.SetCursorPosition(scorePosX,scorePosY);
-            Console.Write($"Score: {score}");
-            Console.SetCursorPosition(resetPosX,resetPosY);
-            Console.Write($"Resets: {noOfResets}");
-            
+
             Card cardOne = myDeck.GetRandomCard();
             Card cardTwo = myDeck.GetRandomCard();
+            DisplayUI(cardOne);
 
-            DrawCard(cardOne,cardDrawPosX,cardDrawPosY);
-            DrawCardFaceDown(cardDrawPosX + cardXWidth + 2,cardDrawPosY);
 
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.BackgroundColor = ConsoleColor.Black;
             Console.SetCursorPosition(questionPosX,questionPosY);
-            Console.Write("Is the hidden card higher or lower? H/L or Higher/Lower :");
+            Console.Write("Is the hidden card higher, lower, or equal? H/L or Higher/Lower : ");
             userInput = Console.ReadLine();
+            
+            bool higher = true;
+            if(cardOne.GetCardValue() > cardTwo.GetCardValue())
+            {
+                higher = false;
+            }
+
+            bool correct;
+            string message;
+            if(userInput == "H" && higher)
+            {
+                correct = true;
+                message = "That is correct!";
+            }else
+            {
+                correct = false;
+                message = "That is wrong...";
+            }
+            
+            if(correct) {score ++;}else {noOfResets ++;}
+
+            DisplayResult(cardTwo, message);
+
             Console.ReadLine();
         }
     }
 
+    void DisplayUI(Card visibleCard)
+    {
+        Console.BackgroundColor = ConsoleColor.Black;
+        Console.ForegroundColor = ConsoleColor.Gray;
+        Console.SetCursorPosition(scorePosX,scorePosY);
+        Console.Write($"Score: {score}");
+        Console.SetCursorPosition(resetPosX,resetPosY);
+        Console.Write($"Resets: {noOfResets}");
+            
+        DrawCard(visibleCard,cardDrawPosX,cardDrawPosY);
+        DrawCardFaceDown(cardDrawPosX + cardXWidth + 2,cardDrawPosY);
+    }
+
+    void DisplayResult(Card hiddenCard, string message)
+    {
+        DrawCard(hiddenCard,cardDrawPosX + cardXWidth + 2, cardDrawPosY);
+        Console.ForegroundColor = ConsoleColor.Gray;
+        Console.BackgroundColor = ConsoleColor.Black;
+        Console.SetCursorPosition(questionPosX,questionPosY);
+        Console.Write(message);
+    }
 
     /// <summary>
     /// Draws a card on the screen with a specifed location
