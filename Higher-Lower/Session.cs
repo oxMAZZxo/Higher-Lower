@@ -14,15 +14,18 @@ public class Session
     const int scorePosY = 0;
     const int resetPosX = 30;
     const int resetPosY = 0;
+    const int highScorePosX = 60;
+    const int highScorePosY = 0;
     const int cardDrawPosX = 10;
     const int cardDrawPosY = 2;
     const int questionPosX = 0;
     const int questionPosY = 15;
-    const int delayUntilNextCard = 3500;
+    const int delayUntilNextCard = 2500;
     private Deck myDeck;
     private string? userInput;
     private bool exitGame;
-    private int score;
+    private int currentScore;
+    private int highScore;
     private int noOfResets;
 
     /// <summary>
@@ -51,7 +54,8 @@ public class Session
 
         myDeck = new Deck(createJokers, shuffleDeck);
         noOfResets = 0;
-        score = 0;
+        currentScore = 0;
+        highScore = 0;
         exitGame = false;
     }
 
@@ -75,21 +79,38 @@ public class Session
                 visibleCard = hiddenCard;
             }
             hiddenCard = myDeck.GetRandomCard();
-            DisplayHUD();
 
-            DrawCard(visibleCard,cardDrawPosX,cardDrawPosY);
-            DrawCardFaceDown(cardDrawPosX + cardWidth + 2, cardDrawPosY);
-
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.BackgroundColor = ConsoleColor.Black;
-            Console.SetCursorPosition(questionPosX,questionPosY);
-            Console.Write("Is the hidden card higher, lower, or equal? H/L/E: ");
-            userInput = Console.ReadLine()?.ToUpper();
+            bool valid;
+            do
+            {
+                DisplayHUD();
+                DrawCard(visibleCard,cardDrawPosX,cardDrawPosY);
+                DrawCardFaceDown(cardDrawPosX + cardWidth + 2, cardDrawPosY);
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.BackgroundColor = ConsoleColor.Black;
+                Console.SetCursorPosition(questionPosX,questionPosY);
+                Console.Write("Is the hidden card higher, lower, or equal? Otherwise enter Q to quit the game. H/L/E/Q: ");
+                userInput = Console.ReadLine()?.ToUpper();
+                
+                valid = ValidateUserInput("H","L","E","Q");
+                if(!valid)
+                {
+                    Console.WriteLine("You entered an invalid input, you will be prompted again in 2 seconds");
+                    Thread.Sleep(2000);
+                }
+            }while(!valid);
             
             string message;
             bool correct = CalculateResponse(visibleCard,hiddenCard,out message);
-
-            if(correct) {score ++;} else{noOfResets ++;}
+            if(exitGame) {break;}
+            if(correct) 
+            {
+                currentScore ++; 
+                if(currentScore > highScore) {highScore++;}
+            } else
+            {
+                noOfResets ++; currentScore = 0;
+            }
             DisplayHUD();
             DrawCard(visibleCard,cardDrawPosX, cardDrawPosY);
             DrawCard(hiddenCard,cardDrawPosX + cardWidth + 2, cardDrawPosY);
@@ -100,6 +121,24 @@ public class Session
             Console.Write(message);
             Thread.Sleep(delayUntilNextCard);
         }
+        Console.WriteLine("Exiting Game....");
+        Thread.Sleep(1000);
+    }
+
+    /// <summary>
+    /// Will validate users input based on option parameter
+    /// </summary>
+    /// <returns>Returns true if input is valid</returns>
+    bool ValidateUserInput(params string[] options)
+    {
+        foreach(string option in options)
+        {
+            if(userInput == option)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     void DisplayHUD()
@@ -108,9 +147,11 @@ public class Session
         Console.BackgroundColor = ConsoleColor.Black;
         Console.ForegroundColor = ConsoleColor.Gray;
         Console.SetCursorPosition(scorePosX,scorePosY);
-        Console.Write($"Score: {score}");
+        Console.Write($"Score: {currentScore}");
         Console.SetCursorPosition(resetPosX,resetPosY);
         Console.Write($"Resets: {noOfResets}");
+        Console.SetCursorPosition(highScorePosX,highScorePosY);
+        Console.Write($"High Score: {highScore}");
     }
 
     bool CalculateResponse(Card visibleCard, Card hiddenCard, out string message)
@@ -152,6 +193,9 @@ public class Session
                     correct = true;
                 }
             break;
+            case "Q":
+                exitGame = true;
+            return false;
         }
 
         return correct;
