@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.VisualBasic;
 
 namespace Higher_Lower
 {
@@ -19,7 +18,7 @@ public class Session
     const int cardDrawPosY = 2;
     const int questionPosX = 0;
     const int questionPosY = 15;
-    const int delayUntilNextCard = 5000;
+    const int delayUntilNextCard = 3500;
     private Deck myDeck;
     private string? userInput;
     private bool exitGame;
@@ -200,9 +199,8 @@ public class Session
                     charCodeToPrint = 9553; // Left or right column
                 }
 
-                Console.Write(Strings.ChrW(charCodeToPrint));
+                Console.Write((char)charCodeToPrint);
             }
-            Console.WriteLine();
         }
 
         if(card.value == "J" || card.value == "Q" || card.value == "K" || card.value == "Joker")
@@ -236,7 +234,6 @@ public class Session
     private void DrawCardFaceDown(int startX, int startY)
     {
         int charCodeToPrint;
-        Console.BackgroundColor = ConsoleColor.White;
         Console.ForegroundColor = ConsoleColor.Black;
         for (int y = 0; y < cardHeight + 1; y++)
         {
@@ -244,34 +241,56 @@ public class Session
             {
                 charCodeToPrint = 32;
                 Console.SetCursorPosition(x + startX, y + startY);
-                if (x == 0 && y == 0)
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                if(y == 0 || y == cardHeight || x == 0 || x == cardWidth)
+                {
+                    Console.BackgroundColor = ConsoleColor.White;
+                }
+
+                if (x == 1 && y == 1)
                 {
                     charCodeToPrint = 9555; // Top left corner
                 }
-                else if (y == 0 && x == cardWidth)
+                else if (y == 1 && x == cardWidth - 1)
                 {
                     charCodeToPrint = 9558; // Top right corner
                 }
-                else if (y == cardHeight && x == 0)
+                else if (y == cardHeight -1 && x == 1)
                 {
                     charCodeToPrint = 9561; // Bottom left corner
                 }
-                else if (y == cardHeight && x == cardWidth)
+                else if (y == cardHeight - 1 && x == cardWidth - 1)
                 {
                     charCodeToPrint = 9564; // Bottom right corner
                 }
-                else if (y == 0 || y == cardHeight)
+
+                if(x > 1 && x < cardWidth -1 && y == 1)
                 {
-                    charCodeToPrint = 9552; // Top or bottom row
-                }
-                else if (x == 0 || x == cardWidth)
-                {
-                    charCodeToPrint = 9553; // Left or right column
+                     charCodeToPrint = 9574; // Top row
                 }
 
-                Console.Write(Strings.ChrW(charCodeToPrint));
+                if(x > 1 && x < cardWidth -1 && y == cardHeight -1)
+                {
+                     charCodeToPrint = 9577; // bottom row
+                }
+
+                if(y > 1 && y < cardHeight -1 && x == 1 )
+                {
+                    charCodeToPrint = 9568; // Left column
+                }
+
+                if(y > 1 && y < cardHeight -1 &&  x == cardWidth - 1)
+                {
+                    charCodeToPrint = 9571; // right column
+                }
+
+                if(y > 1 && y < cardHeight -1 && x > 1 && x < cardWidth -1)
+                {
+                    charCodeToPrint = 9580; // all directions
+                }
+                
+                Console.Write((char)charCodeToPrint);
             }
-            Console.WriteLine();
         }
     }
 
