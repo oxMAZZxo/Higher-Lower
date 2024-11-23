@@ -64,7 +64,7 @@ public class Session
     /// <summary>
     /// Starts a game session
     /// </summary>
-    public void StartGame()
+    public void PlayGame()
     {
         bool firstRun = true;
         Card hiddenCard = myDeck.GetRandomCard(); // this is done to avoid the compiler error (Use of unassigned local variable) on line 78
@@ -116,6 +116,7 @@ public class Session
             DisplayHUD();
             DrawCard(visibleCard,cardDrawPosX, cardDrawPosY);
             DrawCard(hiddenCard,cardDrawPosX + cardWidth + 2, cardDrawPosY);
+            myDeck.ReturnCardToDeck(visibleCard);
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.SetCursorPosition(questionPosX,questionPosY);
@@ -128,6 +129,9 @@ public class Session
         Thread.Sleep(100);
     }
 
+    /// <summary>
+    /// Displays the basic Heads Up Display of a HIGHER/LOWER Session
+    /// </summary>
     void DisplayHUD()
     {
         Console.Clear();
@@ -332,6 +336,11 @@ public class Session
         }
     }
 
+    /// <summary>
+    /// Draws a picture card, which is a card like Jack, Queen or King, which contain a "picture"
+    /// </summary>
+    /// <param name="startX">Start X position on the console</param>
+    /// <param name="startY">Start Y position on the console</param>
     void DrawPictureCard(int startX, int startY)
     {
         Random rnd = new Random();
@@ -373,12 +382,15 @@ public class Session
 
     }
     
-    private async void SaveGame()
+    /// <summary>
+    /// Saves the current player session syncronously
+    /// </summary>
+    private void SaveGame()
     {
         string currentTime = Program.GetTimeOfDay();
         string currentDate = Program.GetCurrentDate();
         StreamWriter streamWriter = new StreamWriter(Program.leaderboardFilePath,true);
-        await streamWriter.WriteLineAsync($"{playerName},{highScore},{noOfResets},{currentDate},{currentTime}");
+        streamWriter.WriteLine($"{playerName},{highScore},{noOfResets},{currentDate},{currentTime}");
         streamWriter.Close();
         streamWriter.Dispose();
     }

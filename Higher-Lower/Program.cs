@@ -14,6 +14,7 @@ namespace Higher_Lower
             string? menuChoice = null;
             bool valid = false;
             bool exit = false;
+            
             FileInfo leaderboardFile = new FileInfo(leaderboardFilePath);
             if(!leaderboardFile.Exists)
             {
@@ -24,15 +25,16 @@ namespace Higher_Lower
             {
                 do
                 {
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.ForegroundColor = ConsoleColor.Gray;
                     Console.Clear();
                     Console.WriteLine("V===================V");
                     Console.WriteLine("1. Play Higher/Lower.");            
-                    Console.WriteLine("2. How To Play.");            
-                    Console.WriteLine("3. Leaderboards.");            
-                    Console.WriteLine("4. Exit.");
+                    Console.WriteLine("2. Leaderboards.");            
+                    Console.WriteLine("3. Exit.");
                     Console.Write("Enter one of the options above and press enter: ");
                     menuChoice = Console.ReadLine();
-                    valid = ValidateUserInput(menuChoice, "1","2","3","4");
+                    valid = ValidateUserInput(menuChoice, "1","2","3");
                     if(valid == false)
                     {
                         Console.WriteLine("You entered an invalid answer, you will be prompted again in 2 seconds");
@@ -47,42 +49,44 @@ namespace Higher_Lower
                     playerName = Console.ReadLine();
                     if(playerName == null) {playerName = "DefaultName";}
                     session = new Session(playerName);
-                    session.StartGame();
+                    session.PlayGame();
                     break;
                     case "2":
-                    DemonstrateGame();
-                    break;
-                    case "3":
                     Console.Clear();
                     ShowLeaderboard();
                     break;
-                    case "4":
+                    case "3":
                     exit = true;
                     break;
                 }
             }
         }
 
-        static void DemonstrateGame()
+        static void ShowLeaderboard()
         {
-            Console.WriteLine("Demonstrating Game...");
-            Thread.Sleep(1000);
-        }
-
-        static async void ShowLeaderboard()
-        {
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("________Leaderboard________");
+            Console.ForegroundColor = ConsoleColor.Gray;
             string? currentLine;
+            int currentBackgroundColor = 0;
             StreamReader streamReader = new StreamReader(leaderboardFilePath);
             while(!streamReader.EndOfStream)
             {
-                currentLine = await streamReader.ReadLineAsync();
+                currentLine = streamReader.ReadLine();
                 if(currentLine != null)
                 {
                     string[] data = currentLine.Split(",");
+                    Console.BackgroundColor = (ConsoleColor)currentBackgroundColor;
                     Console.WriteLine($"Name: {data[0]}, High Score: {data[1]}, Number of Resets: {data[2]}, Date & Time: {data[3]} & {data[4]}");
+                    currentBackgroundColor ++;
+                    if(currentBackgroundColor > 4){currentBackgroundColor = 0;}
                 }
             }
+            streamReader.Close();
+            streamReader.Dispose();
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("____Press Enter to Exit____");
             Console.ReadLine();
         }
