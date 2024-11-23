@@ -16,7 +16,7 @@ public class Session
     const int resetPosY = 0;
     const int highScorePosX = 60;
     const int highScorePosY = 0;
-    const int cardDrawPosX = 10;
+    const int cardDrawPosX = 30;
     const int cardDrawPosY = 2;
     const int questionPosX = 0;
     const int questionPosY = 15;
@@ -27,12 +27,14 @@ public class Session
     private int currentScore;
     private int highScore;
     private int noOfResets;
+    private string playerName;
 
     /// <summary>
     /// Instantiates a session
     /// </summary>
-    public Session()
+    public Session(string newPlayerName)
     {
+        playerName = newPlayerName;
         Console.Write("Create Jokers? Enter Y/N or yes/no: ");
         userInput = Console.ReadLine();
         userInput = userInput?.ToUpper();
@@ -92,7 +94,7 @@ public class Session
                 Console.Write("Is the hidden card higher, lower, or equal? Otherwise enter Q to quit the game. H/L/E/Q: ");
                 userInput = Console.ReadLine()?.ToUpper();
                 
-                valid = ValidateUserInput("H","L","E","Q");
+                valid = Program.ValidateUserInput(userInput,"H","L","E","Q");
                 if(!valid)
                 {
                     Console.WriteLine("You entered an invalid input, you will be prompted again in 2 seconds");
@@ -121,31 +123,16 @@ public class Session
             Console.Write(message);
             Thread.Sleep(delayUntilNextCard);
         }
-        Console.WriteLine("Exiting Game....");
-        Thread.Sleep(1000);
-    }
-
-    /// <summary>
-    /// Will validate users input based on option parameter
-    /// </summary>
-    /// <returns>Returns true if input is valid</returns>
-    bool ValidateUserInput(params string[] options)
-    {
-        foreach(string option in options)
-        {
-            if(userInput == option)
-            {
-                return true;
-            }
-        }
-        return false;
+        Console.WriteLine("Saving Game....");
+        SaveGame();
+        Thread.Sleep(100);
     }
 
     void DisplayHUD()
     {
         Console.Clear();
-        Console.BackgroundColor = ConsoleColor.Black;
-        Console.ForegroundColor = ConsoleColor.Gray;
+        Console.BackgroundColor = ConsoleColor.White;
+        Console.ForegroundColor = ConsoleColor.Black;
         Console.SetCursorPosition(scorePosX,scorePosY);
         Console.Write($"Score: {currentScore}");
         Console.SetCursorPosition(resetPosX,resetPosY);
@@ -154,6 +141,13 @@ public class Session
         Console.Write($"High Score: {highScore}");
     }
 
+    /// <summary>
+    /// Calculates the response that the console will give the player based on their input
+    /// </summary>
+    /// <param name="visibleCard">The visible card</param>
+    /// <param name="hiddenCard">The hidden card</param>
+    /// <param name="message">The output message</param>
+    /// <returns></returns>
     bool CalculateResponse(Card visibleCard, Card hiddenCard, out string message)
     {
         bool isHiddenCardHigher = false;
@@ -379,5 +373,14 @@ public class Session
 
     }
     
+    private async void SaveGame()
+    {
+        string currentTime = Program.GetTimeOfDay();
+        string currentDate = Program.GetCurrentDate();
+        StreamWriter streamWriter = new StreamWriter(Program.leaderboardFilePath,true);
+        await streamWriter.WriteLineAsync($"{playerName},{highScore},{noOfResets},{currentDate},{currentTime}");
+        streamWriter.Close();
+        streamWriter.Dispose();
+    }
 }
 }
