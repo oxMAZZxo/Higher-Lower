@@ -5,6 +5,7 @@ namespace Higher_Lower
     public class Program
     {
         private static Session? session;
+        private static Leaderboard? leaderboard;
         public static readonly string leaderboardFilePath = AppDomain.CurrentDomain.BaseDirectory + "\\leaderboard.csv";
 
         static void Main(string[] args)
@@ -21,6 +22,8 @@ namespace Higher_Lower
                 File.Create(leaderboardFilePath);
             }
             
+            leaderboard = new Leaderboard(leaderboardFile);
+
             while(!exit)
             {
                 do
@@ -48,10 +51,16 @@ namespace Higher_Lower
                     Console.Write("Enter your name: ");
                     playerName = Console.ReadLine();
                     if(playerName == null) {playerName = "DefaultName";}
-                    session = new Session(playerName);
+                    Player newPlayer = new Player(playerName);
+                    session = new Session(newPlayer);
                     session.PlayGame();
                     break;
                     case "2":
+                    if(!leaderboard.dataAvailable)
+                    {
+                        Console.WriteLine("Data isn't available yet");
+                        break;
+                    }
                     Console.Clear();
                     ShowLeaderboard();
                     break;
@@ -62,29 +71,24 @@ namespace Higher_Lower
             }
         }
 
+        /// <summary>
+        /// Displays the Leaderboard of players
+        /// </summary>
         static void ShowLeaderboard()
         {
+            if(leaderboard == null) {return;}
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("________Leaderboard________");
-            Console.ForegroundColor = ConsoleColor.Gray;
-            string? currentLine;
-            int currentBackgroundColor = 0;
-            StreamReader streamReader = new StreamReader(leaderboardFilePath);
-            while(!streamReader.EndOfStream)
+            int currentBackgroundColour = 0;
+            Console.ForegroundColor = ConsoleColor.White;
+            foreach(Player player in leaderboard.players)
             {
-                currentLine = streamReader.ReadLine();
-                if(currentLine != null)
-                {
-                    string[] data = currentLine.Split(",");
-                    Console.BackgroundColor = (ConsoleColor)currentBackgroundColor;
-                    Console.WriteLine($"Name: {data[0]}, High Score: {data[1]}, Number of Resets: {data[2]}, Date & Time: {data[3]} & {data[4]}");
-                    currentBackgroundColor ++;
-                    if(currentBackgroundColor > 4){currentBackgroundColor = 0;}
-                }
+                Console.BackgroundColor = (ConsoleColor)currentBackgroundColour;
+                Console.WriteLine($"Name: {player.name}, High Score: {player.highScore}, No Of Loses: {player.noOfLoses}, Date & Time: {player.date} | {player.time}");
+                currentBackgroundColour ++;
+                if(currentBackgroundColour > 4) {currentBackgroundColour = 0;}
             }
-            streamReader.Close();
-            streamReader.Dispose();
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.WriteLine("____Press Enter to Exit____");
@@ -106,7 +110,11 @@ namespace Higher_Lower
             }
             return false;
         }
-    
+
+        /// <summary>
+        /// Get the current date
+        /// </summary>
+        /// <returns>Retuns the current date in a string</returns>
         public static string GetCurrentDate()
         {
             string CurrentDate;
@@ -117,6 +125,10 @@ namespace Higher_Lower
             return CurrentDate;
         }
 
+        /// <summary>
+        /// Get the current time of day
+        /// </summary>
+        /// <returns>Returns the time in a string</returns>
         public static string GetTimeOfDay()
         {
             string Time = $"Time {DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")}";

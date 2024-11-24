@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Higher_Lower
@@ -27,14 +26,14 @@ public class Session
     private int currentScore;
     private int highScore;
     private int noOfResets;
-    private string playerName;
+    private Player currentPlayer;
 
     /// <summary>
     /// Instantiates a session
     /// </summary>
-    public Session(string newPlayerName)
+    public Session(Player newPlayerName)
     {
-        playerName = newPlayerName;
+        currentPlayer = newPlayerName;
         Console.Write("Create Jokers? Enter Y/N or yes/no: ");
         userInput = Console.ReadLine();
         userInput = userInput?.ToUpper();
@@ -122,6 +121,8 @@ public class Session
             Console.SetCursorPosition(questionPosX,questionPosY);
             if(correct) {Console.ForegroundColor = ConsoleColor.Green;} else{Console.ForegroundColor = ConsoleColor.Red;}
             Console.Write(message);
+            currentPlayer.SetHighScore(highScore);
+            currentPlayer.SetNumberOfLoses(noOfResets);
             Thread.Sleep(delayUntilNextCard);
         }
         Console.WriteLine("Saving Game....");
@@ -390,7 +391,7 @@ public class Session
         string currentTime = Program.GetTimeOfDay();
         string currentDate = Program.GetCurrentDate();
         StreamWriter streamWriter = new StreamWriter(Program.leaderboardFilePath,true);
-        streamWriter.WriteLine($"{playerName},{highScore},{noOfResets},{currentDate},{currentTime}");
+        streamWriter.WriteLine($"{currentPlayer.name},{currentPlayer.highScore},{currentPlayer.noOfLoses},{currentDate},{currentTime}");
         streamWriter.Close();
         streamWriter.Dispose();
     }
