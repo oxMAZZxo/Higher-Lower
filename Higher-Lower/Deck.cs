@@ -12,11 +12,8 @@ public class Deck
     const char clubs = '\u2663';    // ♣
     #endregion
 
+    //I chose to represent the cards as an array, since the size of the deck will only change once if the use chooses to add jokers to the deck.
     private Card[] cards;
-    public int length
-    {
-        get => cards.Length;
-    }
     public int redJokerIndex;
     public int blackJokerIndex;
 
@@ -31,7 +28,6 @@ public class Deck
         GenerateDeck();
         if (jokers) { AddJokers(); }
         if (shuffle) { ShuffleDeck(); }
-
     }
 
     /// <summary>

@@ -65,6 +65,7 @@ public class Leaderboard
 
     private void OnFileChange(object? sender, FileSystemEventArgs e)
     {
+        if(e.Name != leaderboard.Name) {return;}
         Debug.WriteLine($"File System Watcher detected a change. File Name: {e.Name}");
         ReadData();
     }

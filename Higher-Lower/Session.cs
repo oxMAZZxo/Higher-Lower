@@ -37,20 +37,20 @@ public class Session
         Console.Write("Create Jokers? Enter Y/N or yes/no: ");
         userInput = Console.ReadLine();
         userInput = userInput?.ToUpper();
-        bool createJokers = false;
-        if(userInput == "Y" || userInput == "YES")
+        bool createJokers = true;
+        if(userInput == "N" || userInput == "NO")
         {
-            createJokers = true;
+            createJokers = false;
         }
 
         Console.Write("Shuffle Deck? Enter Y/N or yes/no: ");
         userInput = Console.ReadLine();
         userInput = userInput?.ToUpper();
         
-        bool shuffleDeck = false;
-        if(userInput == "Y" || userInput == "YES")
+        bool shuffleDeck = true;
+        if(userInput == "N" || userInput == "NO")
         {
-            shuffleDeck = true;
+            shuffleDeck = false;
         }
 
         myDeck = new Deck(createJokers, shuffleDeck);
@@ -378,7 +378,7 @@ public class Session
 
         for(int i = 0; i < (cardWidth + 2) * 2; i += cardWidth + 2)
         {
-            DrawCard(myDeck.GetCard(myDeck.blackJokerIndex),i,lastY);
+            DrawCard(myDeck.GetCard(myDeck.blackJokerIndex),i, lastY + cardHeight + 2);
         }
 
     }

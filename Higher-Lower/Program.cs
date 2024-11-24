@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection.Metadata;
 
 namespace Higher_Lower
 {
@@ -7,6 +8,7 @@ namespace Higher_Lower
         private static Session? session;
         private static Leaderboard? leaderboard;
         public static readonly string leaderboardFilePath = AppDomain.CurrentDomain.BaseDirectory + "\\leaderboard.csv";
+        private const string invalidCharacters = " \\`¬/{}%$=£&*";
 
         static void Main(string[] args)
         {
@@ -47,10 +49,7 @@ namespace Higher_Lower
                 switch(menuChoice)
                 {
                     case "1":
-                    string? playerName;
-                    Console.Write("Enter your name: ");
-                    playerName = Console.ReadLine();
-                    if(playerName == null) {playerName = "DefaultName";}
+                    string playerName = GetPlayerName();                    
                     Player newPlayer = new Player(playerName);
                     session = new Session(newPlayer);
                     session.PlayGame();
@@ -82,10 +81,10 @@ namespace Higher_Lower
             Console.WriteLine("________Leaderboard________");
             int currentBackgroundColour = 0;
             Console.ForegroundColor = ConsoleColor.White;
-            foreach(Player player in leaderboard.players)
+            for(int i = 0; i < leaderboard.players.Count; i++)
             {
                 Console.BackgroundColor = (ConsoleColor)currentBackgroundColour;
-                Console.WriteLine($"Name: {player.name}, High Score: {player.highScore}, No Of Loses: {player.noOfLoses}, Date & Time: {player.date} | {player.time}");
+                Console.WriteLine($"{i + 1} - {leaderboard.players[i].name}, High Score: {leaderboard.players[i].highScore}, No Of Loses: {leaderboard.players[i].noOfLoses}, Date & Time: {leaderboard.players[i].date} | {leaderboard.players[i].time}");
                 currentBackgroundColour ++;
                 if(currentBackgroundColour > 4) {currentBackgroundColour = 0;}
             }
@@ -104,6 +103,42 @@ namespace Higher_Lower
             foreach(string option in options)
             {
                 if(userInput == option)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        static string GetPlayerName()
+        {
+            string? input = "value";
+            bool invalid;
+            do{
+                Console.Write("Enter your name: ");
+                input = Console.ReadLine();
+                invalid = CheckForInvalidCharacter(input);
+                if(invalid)
+                {
+                    Console.WriteLine("You have entered an invalid character. You will be prompted again in 2 seconds");
+                    Thread.Sleep(2000);
+                }
+            }while(invalid);
+            
+            return input;
+        }
+
+        /// <summary>
+        /// Checks if a given input contains invalid characters
+        /// </summary>
+        /// <param name="input">The input being checked for invalid characters</param>
+        /// <returns>Returns false if no invalidCharacter is found</returns>
+        private static bool CheckForInvalidCharacter(string? input)
+        {
+            if(string.IsNullOrEmpty(input) || string.IsNullOrWhiteSpace(input)) {return true;}   
+            for(int i = 0; i < input.Length; i++)
+            {
+                if(invalidCharacters.IndexOf(input[i]) > -1)
                 {
                     return true;
                 }
