@@ -56,7 +56,7 @@ namespace Higher_Lower
                     session.PlayGame();
                     break;
                     case "2":
-                    if(!leaderboard.dataAvailable)
+                    if(!leaderboard.available)
                     {
                         Console.WriteLine("Data isn't available yet");
                         break;
@@ -131,8 +131,7 @@ namespace Higher_Lower
         /// <returns>Returns the time in a string</returns>
         public static string GetTimeOfDay()
         {
-            string Time = $"Time {DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss")}";
-            return Time;
+            return DateTime.Now.TimeOfDay.ToString(@"hh\:mm\:ss");;
         }
     }
 }

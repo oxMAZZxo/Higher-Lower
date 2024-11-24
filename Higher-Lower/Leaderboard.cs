@@ -7,7 +7,7 @@ public class Leaderboard
     public List<Player> players {get; private set;}
     private FileInfo leaderboard;
     public event EventHandler<EventArgs> readFinished;
-    public bool dataAvailable {get; private set;}
+    public bool available {get; private set;}
     private FileSystemWatcher? fileSystemWatcher;
 
     /// <summary>
@@ -23,7 +23,7 @@ public class Leaderboard
             fileSystemWatcher.Changed += OnFileChange;
             fileSystemWatcher.EnableRaisingEvents = true;
         }
-        dataAvailable = false;
+        available = false;
         players = new List<Player>();
         readFinished += SortPlayers;
         ReadData();
@@ -60,7 +60,7 @@ public class Leaderboard
     private void SortPlayers(object? sender, EventArgs e)
     {
         players = players.OrderByDescending(player => player.highScore).ToList();
-        dataAvailable = true;
+        available = true;
     }
 
     private void OnFileChange(object? sender, FileSystemEventArgs e)

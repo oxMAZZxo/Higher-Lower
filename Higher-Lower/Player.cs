@@ -27,7 +27,5 @@ public class Player{
 
     public void SetHighScore(int newValue) {highScore = newValue;}
     public void SetNumberOfLoses(int newValue) {noOfLoses = newValue;}
-    public void SetDate(string newValue) {date = newValue;}
-    public void SetTime(string newValue) {time = newValue;}
 }
 }
