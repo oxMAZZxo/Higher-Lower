@@ -21,8 +21,11 @@ namespace Higher_Lower
             FileInfo leaderboardFile = new FileInfo(leaderboardFilePath);
             if(!leaderboardFile.Exists)
             {
-                File.Create(leaderboardFilePath);
+                FileStream fileStream = File.Create(leaderboardFilePath);
+                fileStream.Close();
+                fileStream.Dispose();
             }
+            leaderboardFile.Refresh();
             
             leaderboard = new Leaderboard(leaderboardFile);
 
