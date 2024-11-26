@@ -355,33 +355,6 @@ public class Session
             }
         }
     }
-
-    /// <summary>
-    /// Draws the whole deck on the console.
-    /// This function may cause bugs on your console, dependning on its settings
-    /// </summary>
-    /// <param name="jokers">If true, it will draw the jokers as well</param>
-    private void DrawDeck(bool jokers)
-    {
-        int nextCard = 0;
-        int lastY = 0;
-        for (int y = 0; y < (cardHeight + 2) * 4; y += cardHeight + 2)
-        {
-            for (int x = 0; x < (cardWidth + 2) * 13; x += cardWidth + 2)
-            {
-                Thread.Sleep(50);
-                DrawCard(myDeck.GetCard(nextCard), x, y);
-                nextCard++;
-            }
-            lastY = y; 
-        }
-
-        for(int i = 0; i < (cardWidth + 2) * 2; i += cardWidth + 2)
-        {
-            DrawCard(myDeck.GetCard(myDeck.blackJokerIndex),i, lastY + cardHeight + 2);
-        }
-
-    }
     
     /// <summary>
     /// Saves the current player session syncronously

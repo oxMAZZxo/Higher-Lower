@@ -63,6 +63,11 @@ public class Leaderboard
         available = true;
     }
 
+    /// <summary>
+    /// Functions triggers when the assigned leaderboard file changes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void OnFileChange(object? sender, FileSystemEventArgs e)
     {
         if(e.Name != leaderboard.Name) {return;}

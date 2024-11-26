@@ -14,6 +14,12 @@ public class Card{
     public bool isJoker {get; private set;}
     public bool isUsed {get; private set;}
 
+    /// <summary>
+    /// Instantiates a card with specified values
+    /// </summary>
+    /// <param name="cardValue">The card value as a string representation</param>
+    /// <param name="newSuit">The suit of the card</param>
+    /// <param name="joker">Is the card a joker</param>
     public Card(string cardValue, Suit newSuit, bool joker)
     {
         value = cardValue;
@@ -22,6 +28,10 @@ public class Card{
         isUsed = false;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns>Returns the value of a card as an integer</returns>
     public int GetCardValue()
     {
         int result = 0;
@@ -48,6 +58,10 @@ public class Card{
         return result;
     }
 
+    /// <summary>
+    /// Set the card as used
+    /// </summary>
+    /// <param name="newValue">Is the card used</param>
     public void SetUsed(bool newValue)
     {
         isUsed = newValue;

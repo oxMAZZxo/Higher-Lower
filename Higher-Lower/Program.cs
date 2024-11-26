@@ -113,6 +113,10 @@ namespace Higher_Lower
             return false;
         }
 
+        /// <summary>
+        /// Asks user to input a name and checks for invalid characters in the input
+        /// </summary>
+        /// <returns>Returns a the players name without any invalid characters</returns>
         static string GetPlayerName()
         {
             string? input = "value";
